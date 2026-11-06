@@ -1,12 +1,541 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Website</title>
+  <title>Tutorial Interaktif: Minimalist Card (04-latihan)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 10px 20px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    header p {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .split-layout {
+      flex: 1;
+      display: flex;
+      height: calc(100vh - 49px);
+    }
+
+    /* Panel Kiri */
+    .editor-panel {
+      width: 50%;
+      border-right: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      background: #0f172a;
+    }
+
+    .controls-section {
+      padding: 10px 14px;
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 60%;
+      overflow-y: auto;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.76rem;
+    }
+
+    .control-label {
+      width: 130px;
+      color: #cbd5e1;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .control-inputs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .manual-input {
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.74rem;
+      font-family: monospace;
+      width: 105px;
+      outline: none;
+    }
+
+    .manual-input:focus {
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .btn-group button {
+      background: #334155;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.69rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-group button:hover {
+      background: #475569;
+      color: #ffffff;
+    }
+
+    .btn-group button.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Area Kode */
+    .code-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .code-box {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .code-header {
+      padding: 4px 10px;
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    pre {
+      padding: 8px 10px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.75rem;
+      line-height: 1.35;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+    }
+
+    .val-highlight {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      padding: 1px 3px;
+      border-radius: 3px;
+      border-bottom: 1px solid #38bdf8;
+      font-weight: bold;
+    }
+
+    /* Panel Kanan (Live Preview) */
+    .preview-panel {
+      width: 50%;
+      background: #f8fafc;
+      color: #0f172a;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .preview-badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      background: #0284c7;
+      color: white;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    #playground {
+      width: 100%;
+      min-height: 100%;
+    }
+
+    .target-card {
+      overflow: hidden;
+      vertical-align: top;
+      transition: all 0.2s ease;
+    }
+
+    .target-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .target-card p {
+      transition: all 0.2s ease;
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, World!</h1>
-  <p>Welcome to my new website.</p>
+
+  <header>
+    <h1>Tutorial Interaktif: Desain Minimalist Card (04-latihan)</h1>
+    <p>Termasuk kontrol layout pondasi (display, box-sizing, whitespace) & styling card.</p>
+  </header>
+
+  <div class="split-layout">
+    <!-- PANEL KIRI -->
+    <section class="editor-panel">
+      
+      <!-- MENU KONTROL INTERAKTIF LENGKAP -->
+      <div class="controls-section">
+        <!-- 1. Display Card -->
+        <div class="control-row" style="background: rgba(56, 189, 248, 0.08); padding: 3px 4px; border-radius: 4px;">
+          <span class="control-label" style="color: #38bdf8;">.card { display: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-display" class="manual-input" value="block">
+            <div class="btn-group" data-target="display">
+              <button class="active" data-val="block">block</button>
+              <button data-val="inline-block">inline-block (Berdampingan)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Box Sizing -->
+        <div class="control-row">
+          <span class="control-label">box-sizing:</span>
+          <div class="control-inputs">
+            <input type="text" id="input-boxSizing" class="manual-input" value="border-box">
+            <div class="btn-group" data-target="boxSizing">
+              <button data-val="content-box">content-box</button>
+              <button class="active" data-val="border-box">border-box</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Solusi Whitespace Induk -->
+        <div class="control-row">
+          <span class="control-label">induk { font-size: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-parentFont" class="manual-input" value="16px">
+            <div class="btn-group" data-target="parentFont">
+              <button class="active" data-val="16px">16px</button>
+              <button data-val="0px">0px (Hapus Celah Inline)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Width Card -->
+        <div class="control-row">
+          <span class="control-label">.card { width: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-cardWidth" class="manual-input" value="380px">
+            <div class="btn-group" data-target="cardWidth">
+              <button class="active" data-val="380px">380px</button>
+              <button data-val="260px">260px</button>
+              <button data-val="100%">100%</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Padding Card (Edukasi Full-bleed) -->
+        <div class="control-row" style="background: rgba(249, 115, 22, 0.08); padding: 3px 4px; border-radius: 4px;">
+          <span class="control-label" style="color: #fb923c;">.card { padding: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-cardPadding" class="manual-input" value="0px">
+            <div class="btn-group" data-target="cardPadding">
+              <button class="active" data-val="0px">0px (Gambar Full Tepi)</button>
+              <button data-val="12px">12px (Gambar Lepas Tepi)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Margin Card -->
+        <div class="control-row">
+          <span class="control-label">.card { margin: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-cardMargin" class="manual-input" value="0 auto 20px auto">
+            <div class="btn-group" data-target="cardMargin">
+              <button class="active" data-val="0 auto 20px auto">Tengah (0 auto 20px)</button>
+              <button data-val="10px">10px (Cocok inline-block)</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. Border Radius Card -->
+        <div class="control-row">
+          <span class="control-label">.card { radius: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-radius" class="manual-input" value="8px">
+            <div class="btn-group" data-target="radius">
+              <button data-val="0px">0px</button>
+              <button class="active" data-val="8px">8px</button>
+              <button data-val="16px">16px</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Border Card -->
+        <div class="control-row">
+          <span class="control-label">.card { border: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-border" class="manual-input" value="1px solid #e2e8f0">
+            <div class="btn-group" data-target="border">
+              <button class="active" data-val="1px solid #e2e8f0">1px Abu</button>
+              <button data-val="none">none</button>
+              <button data-val="2px solid #0f172a">2px Gelap</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. Box Shadow -->
+        <div class="control-row">
+          <span class="control-label">.card { shadow: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-shadow" class="manual-input" value="none">
+            <div class="btn-group" data-target="shadow">
+              <button class="active" data-val="none">none</button>
+              <button data-val="0 4px 12px rgba(0,0,0,0.08)">Soft</button>
+              <button data-val="0 10px 25px rgba(0,0,0,0.15)">Deep</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. Card Background -->
+        <div class="control-row">
+          <span class="control-label">.card { bg: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-cardBg" class="manual-input" value="#ffffff">
+            <div class="btn-group" data-target="cardBg">
+              <button class="active" data-val="#ffffff">Putih</button>
+              <button data-val="#f1f5f9">Abu</button>
+              <button data-val="#1e293b">Gelap</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. Text Padding -->
+        <div class="control-row">
+          <span class="control-label">p { padding: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-textPadding" class="manual-input" value="14px 16px">
+            <div class="btn-group" data-target="textPadding">
+              <button data-val="8px 12px">Kecil</button>
+              <button class="active" data-val="14px 16px">Standar</button>
+              <button data-val="20px">Lega</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12. Text Line Height -->
+        <div class="control-row">
+          <span class="control-label">p { line-height: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-lineHeight" class="manual-input" value="1.5">
+            <div class="btn-group" data-target="lineHeight">
+              <button data-val="1.2">1.2</button>
+              <button class="active" data-val="1.5">1.5</button>
+              <button data-val="1.8">1.8</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13. Text Font Size & Color -->
+        <div class="control-row">
+          <span class="control-label">p { font / color: }</span>
+          <div class="control-inputs">
+            <input type="text" id="input-textSize" class="manual-input" style="width: 60px;" value="0.9rem">
+            <input type="text" id="input-textColor" class="manual-input" style="width: 75px;" value="#475569">
+            <div class="btn-group" data-target="textColor">
+              <button class="active" data-val="#475569">Abu</button>
+              <button data-val="#0f172a">Gelap</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KODE VIEW -->
+      <div class="code-scroll-area">
+        <div class="code-box">
+          <div class="code-header">CSS Rules Realtime</div>
+          <pre>#container {
+  font-size: <span id="code-parentFont" class="val-highlight">16px</span>;
+}
+
+.card {
+  box-sizing: <span id="code-boxSizing" class="val-highlight">border-box</span>;
+  display: <span id="code-display" class="val-highlight">block</span>;
+  width: <span id="code-cardWidth" class="val-highlight">380px</span>;
+  padding: <span id="code-cardPadding" class="val-highlight">0px</span>;
+  margin: <span id="code-cardMargin" class="val-highlight">0 auto 20px auto</span>;
+  border-radius: <span id="code-radius" class="val-highlight">8px</span>;
+  border: <span id="code-border" class="val-highlight">1px solid #e2e8f0</span>;
+  box-shadow: <span id="code-shadow" class="val-highlight">none</span>;
+  background-color: <span id="code-cardBg" class="val-highlight">#ffffff</span>;
+  overflow: hidden;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.card p {
+  padding: <span id="code-textPadding" class="val-highlight">14px 16px</span>;
+  line-height: <span id="code-lineHeight" class="val-highlight">1.5</span>;
+  font-size: <span id="code-textSize" class="val-highlight">0.9rem</span>;
+  color: <span id="code-textColor" class="val-highlight">#475569</span>;
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL KANAN (PREVIEW 8 CARD) -->
+    <section class="preview-panel">
+      <div class="preview-badge">Live Preview (8 Minimalist Cards)</div>
+
+      <div id="playground">
+        <div class="target-card">
+          <img src="foto-uniform/uniform-01-800x600.jpg" alt="Halaman Depan">
+          <p>Photography By Cheryl-2 Kursi ditengah dengan pemandangan hijau rumput dan langit biru</p>
+        </div>
+
+        <div class="target-card">
+          <img src="foto-uniform/uniform-02-800x600.jpg" alt="Pedesaan-Manado-Kasuratan">
+          <p>Photography By Cheryl-Perdesaan yang tenang</p>
+        </div>
+
+        <div class="target-card">
+          <img src="foto-uniform/uniform-03-800x600.jpg" alt="View Kota Manado">
+          <p>Photography By Cheryl-Perkotaan di Manado</p>
+        </div>
+
+        <div class="target-card">
+          <img src="foto-uniform/uniform-04-800x600.jpg" alt="Senja">
+          <p>Photography By Cheryl-Senja hari</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const props = [
+      'display', 'boxSizing', 'parentFont', 'cardWidth', 'cardPadding', 
+      'cardMargin', 'radius', 'border', 'shadow', 'cardBg', 
+      'textPadding', 'lineHeight', 'textSize', 'textColor'
+    ];
+
+    function applyStyles() {
+      const state = {};
+      props.forEach(p => {
+        state[p] = document.getElementById('input-' + p).value;
+        const codeEl = document.getElementById('code-' + p);
+        if (codeEl) codeEl.textContent = state[p];
+      });
+
+      document.getElementById('playground').style.fontSize = state.parentFont;
+
+      const cards = document.querySelectorAll('.target-card');
+      cards.forEach(card => {
+        card.style.display = state.display;
+        card.style.boxSizing = state.boxSizing;
+        card.style.width = state.cardWidth;
+        card.style.padding = state.cardPadding;
+        card.style.margin = state.cardMargin;
+        card.style.borderRadius = state.radius;
+        card.style.border = state.border;
+        card.style.boxShadow = state.shadow;
+        card.style.backgroundColor = state.cardBg;
+
+        const p = card.querySelector('p');
+        if (p) {
+          p.style.padding = state.textPadding;
+          p.style.lineHeight = state.lineHeight;
+          p.style.color = state.textColor;
+          p.style.fontSize = state.textSize;
+        }
+      });
+    }
+
+    props.forEach(p => {
+      const input = document.getElementById('input-' + p);
+      if (!input) return;
+      input.addEventListener('input', () => {
+        const group = document.querySelector(`.btn-group[data-target="${p}"]`);
+        if (group) {
+          group.querySelectorAll('button').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-val') === input.value);
+          });
+        }
+        applyStyles();
+      });
+    });
+
+    document.querySelectorAll('.btn-group button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const group = btn.parentElement;
+        const targetProp = group.getAttribute('data-target');
+        const val = btn.getAttribute('data-val');
+
+        group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const input = document.getElementById('input-' + targetProp);
+        if (input) input.value = val;
+        applyStyles();
+      });
+    });
+
+    applyStyles();
+  </script>
 </body>
 </html>
